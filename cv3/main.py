@@ -2,6 +2,20 @@ from fei.ppds import Mutex, Semaphore, Thread
 from time import sleep
 from random import randint
 
+"""Odpovede na otazky:
+    5) Vyhladovanie mi nastavalo pri nastaveni:
+    priemerny cas 0.5, pocet zapisovatelov 1 a
+    pocet citatelov 3. Pridanie turniketu
+    problem vyriesilo.
+
+    7) Vyhladovanie citatelov mi nenastalo ani
+    pri nastaveni s rovnakym priemernym casom,
+    poctom citatelov 1 a poctom zapisovatelov
+    200. Z tohto usudzujem, ze nenastava tento
+    pripad. Zvacsa byva citatelov o viac ako
+    zapisovatelov.
+"""
+
 
 class LightSwitch(object):
     def __init__(self):
@@ -59,8 +73,11 @@ shared = Shared()
 lightSwitch = LightSwitch()
 threads = []
 
+# Pocet zapisovatelov
 n_of_writers = 1
-n_of_readers = 10
+
+# Pocet citatelov
+n_of_readers = 3
 
 for i in range(n_of_writers):
     t = Thread(writer, shared)
