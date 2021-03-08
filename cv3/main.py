@@ -42,7 +42,7 @@ def writer(shared):
         print("W - after ")
 
 
-def reader(thread_id, shared):
+def reader(shared):
     while True:
         shared.turn.wait()
         shared.turn.signal()
@@ -59,12 +59,15 @@ shared = Shared()
 lightSwitch = LightSwitch()
 threads = []
 
-for i in range(1):
-    t = Thread(writer, f"writer {i}", shared)
+n_of_writers = 1
+n_of_readers = 10
+
+for i in range(n_of_writers):
+    t = Thread(writer, shared)
     threads.append(t)
 
-for i in range(1):
-    t = Thread(reader, f"reader {i}", shared)
+for i in range(n_of_readers):
+    t = Thread(reader, shared)
     threads.append(t)
 
 for t in threads:
