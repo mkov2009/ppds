@@ -3,6 +3,22 @@ from time import sleep
 from random import randint
 
 
+class Barrier:
+    def __init__(self, n):
+        self.n = n
+        self.count = 0
+        self.mutex = Mutex()
+        self.event = Event()
+
+    def wait_with_events(self):
+        self.mutex.lock()
+        self.count += 1
+        if self.count == self.n:
+            self.event.signal()
+        self.mutex.unlock()
+        self.event.wait()
+
+
 class LightSwitch(object):
     def __init__(self):
         self.mutex = Mutex()
@@ -25,8 +41,9 @@ class LightSwitch(object):
         self.mutex.unlock()
 
 
-class PowerPlant():
+class PowerPlant:
     def __init__(self):
+        self.barrier = Barrier(3)
         self.monitor_ls = LightSwitch()
         self.sensor_ls = LightSwitch()
         self.no_sensors = Semaphore(1)
@@ -34,6 +51,7 @@ class PowerPlant():
 
     def monitor(self, monitor_id):
         while True:
+            self.barrier.event.wait()
             self.no_monitors.wait()
 
             number_of_monitors_reading = self.monitor_ls.lock(self.no_sensors)
@@ -60,6 +78,8 @@ class PowerPlant():
             sleep(duration)
 
             self.no_sensors.signal()
+            self.barrier.wait_with_events()
+
             self.sensor_ls.unlock(self.no_monitors)
 
 
