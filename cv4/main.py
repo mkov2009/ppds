@@ -80,5 +80,6 @@ for i in range(n_of_p_sensors + n_of_t_sensors):
     threads.append(t)
 
 for i in range(n_of_h_sensors):
-    t = Thread(power_plant.sensor, n_of_p_sensors + n_of_t_sensors + i, randint(20, 25)/1000)
+    t = Thread(power_plant.sensor,
+               n_of_p_sensors + n_of_t_sensors + i, randint(20, 25)/1000)
     threads.append(t)
