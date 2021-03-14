@@ -25,7 +25,7 @@ class LightSwitch(object):
         self.mutex.unlock()
 
 
-class PowerPlant:
+class PowerPlant():
     def __init__(self):
         self.monitor_ls = LightSwitch()
         self.sensor_ls = LightSwitch()
@@ -61,3 +61,24 @@ class PowerPlant:
 
             self.no_sensors.signal()
             self.sensor_ls.unlock(self.no_monitors)
+
+
+threads = []
+power_plant = PowerPlant()
+
+n_of_monitors = 8
+n_of_p_sensors = 1
+n_of_t_sensors = 1
+n_of_h_sensors = 1
+
+for i in range(n_of_monitors):
+    t = Thread(power_plant.monitor, i)
+    threads.append(t)
+
+for i in range(n_of_p_sensors + n_of_t_sensors):
+    t = Thread(power_plant.sensor, i, randint(10, 20)/1000)
+    threads.append(t)
+
+for i in range(n_of_h_sensors):
+    t = Thread(power_plant.sensor, n_of_p_sensors + n_of_t_sensors + i, randint(20, 25)/1000)
+    threads.append(t)
