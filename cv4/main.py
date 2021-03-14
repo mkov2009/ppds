@@ -59,7 +59,7 @@ class PowerPlant:
             duration = randint(40, 50) / 1000
             print('monit "%02d": '
                   'pocet_citajucich_monitorov=%02d, '
-                  'trvanie_citania=%03f\n' %
+                  'trvanie_citania=%03d\n' %
                   (monitor_id, number_of_monitors_reading, duration*1000))
             sleep(duration)
             self.monitor_ls.unlock(self.no_sensors)
