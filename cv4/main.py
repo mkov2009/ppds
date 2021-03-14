@@ -28,7 +28,9 @@ class LightSwitch(object):
 class PowerPlant:
     def __init__(self):
         self.monitor_ls = LightSwitch()
+        self.sensor_ls = LightSwitch()
         self.no_sensors = Semaphore(1)
+        self.no_monitors = Semaphore(1)
 
     def monitor(self, monitor_id):
         while True:
@@ -43,3 +45,19 @@ class PowerPlant:
                   (monitor_id, number_of_monitors_reading, duration*1000))
             sleep(duration)
             self.monitor_ls.unlock(self.no_sensors)
+
+    def sensor(self, sensor_id, duration):
+        while True:
+            sleep(randint(50, 60) / 1000)
+
+            number_of_sensors_writing = self.sensor_ls.lock(self.no_monitors)
+            self.no_sensors.wait()
+
+            print('cidlo "%02d": '
+                  'pocet_zapisujucich_cidiel=%02d, '
+                  'trvanie_zapisu=%03d\n' %
+                  (sensor_id, number_of_sensors_writing, duration * 1000))
+            sleep(duration)
+
+            self.no_sensors.signal()
+            self.sensor_ls.unlock(self.no_monitors)
