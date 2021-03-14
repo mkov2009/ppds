@@ -13,7 +13,7 @@ class LightSwitch(object):
         if self.counter == 1:
             semaphore.wait()
         self.mutex.unlock()
-        return counter;
+        return counter
 
     def unlock(self, semaphore):
         self.mutex.lock()
