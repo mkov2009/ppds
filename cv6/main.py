@@ -29,6 +29,7 @@ class Shared(object):
         self.barrier = Barrier(3)
 
     def oxygen(self):
+        sleep(randint(1, 10) / 10)
         self.mutex.lock()
         self.oxygenCount += 1
         if self.hydrogenCount < 2:
@@ -46,6 +47,7 @@ class Shared(object):
         self.mutex.unlock()
 
     def hydrogen(self):
+        sleep(randint(1, 10) / 10)
         self.mutex.lock()
         self.hydrogenCount += 1
         if self.hydrogenCount < 2 or self.oxygenCount < 1:
