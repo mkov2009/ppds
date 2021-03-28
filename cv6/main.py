@@ -40,6 +40,8 @@ class Shared(object):
             self.hydroQueue.signal(2)
 
         self.oxyQueue.wait()
+        print("Oxygen bonding")
+
         self.barrier.wait()
         self.mutex.unlock()
 
@@ -55,4 +57,20 @@ class Shared(object):
             self.hydroQueue.signal(2)
 
         self.hydroQueue.wait()
+        print("Hydrogen bonding")
         self.barrier.wait()
+
+
+threads = []
+sh = Shared()
+for i in range(10):
+    t = Thread(sh.oxygen)
+    threads.append(t)
+
+for i in range(20):
+    t = Thread(sh.hydrogen)
+    threads.append(t)
+
+for t in threads:
+    t.join()
+
