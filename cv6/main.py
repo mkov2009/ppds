@@ -21,7 +21,7 @@ class Barrier:
 
 class Shared(object):
     def __init__(self):
-        self.mutex = Mutex()
+        self.mutex = Semaphore(1)
         self.oxygenCount = 0
         self.hydrogenCount = 0
         self.oxyQueue = Semaphore(1)
@@ -30,10 +30,10 @@ class Shared(object):
 
     def oxygen(self):
         sleep(randint(1, 10) / 10)
-        self.mutex.lock()
+        self.mutex.wait()
         self.oxygenCount += 1
         if self.hydrogenCount < 2:
-            self.mutex.unlock()
+            self.mutex.signal()
         else:
             self.oxygenCount -= 1
             self.hydrogenCount -= 2
@@ -44,14 +44,14 @@ class Shared(object):
         print("Oxygen bonding")
 
         self.barrier.wait()
-        self.mutex.unlock()
+        self.mutex.signal()
 
     def hydrogen(self):
         sleep(randint(1, 10) / 10)
-        self.mutex.lock()
+        self.mutex.wait()
         self.hydrogenCount += 1
         if self.hydrogenCount < 2 or self.oxygenCount < 1:
-            self.mutex.unlock()
+            self.mutex.signal()
         else:
             self.oxygenCount -= 1
             self.hydrogenCount -= 2
