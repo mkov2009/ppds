@@ -32,6 +32,7 @@ class Shared(object):
         sleep(randint(1, 10) / 10)
         self.mutex.wait()
         self.oxygenCount += 1
+        print("Oxygen count = ", self.oxygenCount)
         if self.hydrogenCount < 2:
             self.mutex.signal()
         else:
@@ -39,10 +40,10 @@ class Shared(object):
             self.hydrogenCount -= 2
             self.oxyQueue.signal()
             self.hydroQueue.signal(2)
+            print("bonding")
+            print("count after bond: oxygen: %d, hydrogen: %d\n" % (self.oxygenCount, self.hydrogenCount))
 
         self.oxyQueue.wait()
-        print("Oxygen bonding")
-
         self.barrier.wait()
         self.mutex.signal()
 
@@ -50,6 +51,7 @@ class Shared(object):
         sleep(randint(1, 10) / 10)
         self.mutex.wait()
         self.hydrogenCount += 1
+        print("Hydrogen count = ", self.hydrogenCount)
         if self.hydrogenCount < 2 or self.oxygenCount < 1:
             self.mutex.signal()
         else:
@@ -57,19 +59,20 @@ class Shared(object):
             self.hydrogenCount -= 2
             self.oxyQueue.signal()
             self.hydroQueue.signal(2)
+            print("bonding")
+            print("count after bond: oxygen: %d, hydrogen: %d\n" % (self.oxygenCount, self.hydrogenCount))
 
         self.hydroQueue.wait()
-        print("Hydrogen bonding")
         self.barrier.wait()
 
 
 threads = []
 sh = Shared()
-for i in range(10):
+for i in range(100):
     t = Thread(sh.oxygen)
     threads.append(t)
 
-for i in range(20):
+for i in range(200):
     t = Thread(sh.hydrogen)
     threads.append(t)
 
