@@ -22,6 +22,7 @@ class Scheduler(object):
         self.list.append(task)
 
     def run(self):
+        self.list.sort(key=sort_func)
         while len(self.list) != 0:
             task = self.list.pop(0)
             task.run()
