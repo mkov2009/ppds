@@ -28,6 +28,10 @@ class Scheduler(object):
             self.add_task(task.get_target(), task.get_priority())
 
 
+def sort_func(task):
+    return task.get_priority()
+
+
 def test1():
     while True:
         print("Test1")
