@@ -15,8 +15,11 @@ async def check_ping(hostname):
 async def main():
     start = time.time()
     websites = ["google.sk", "stuba.sk", "linkedin.com", "discord.com"]
+    tasks = []
     for i in websites:
-        asyncio.ensure_future(check_ping(i))
+        tasks.append(asyncio.ensure_future(check_ping(i)))
+
+    await asyncio.gather(*tasks)
 
     end = time.time()
     print("This task took " + str(end - start) + " seconds to complete.")
