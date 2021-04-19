@@ -1,15 +1,17 @@
 import time
-import os
 import asyncio
 
 
 async def check_ping(hostname):
-    response = os.system("ping -n 2 " + hostname)
-    if response == 0:
+    proc = await asyncio.create_subprocess_shell(
+        'ping -n 2 ' + hostname, stdout=asyncio.subprocess.PIPE)
+    line = await proc.stdout.readline()
+    if line != b"":
         ping_status = hostname + " Network Active"
     else:
         ping_status = hostname + " Network Error"
     print(ping_status)
+    return
 
 
 async def main():
