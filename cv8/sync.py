@@ -13,7 +13,10 @@ def check_ping(hostname):
 
 def main():
     start = time.time()
-    check_ping("google.sk")
+    websites = ["google.sk", "stuba.sk", "linkedin.com", "discord.com"]
+    for i in websites:
+        check_ping(i)
+
     end = time.time()
     print("This task took " + str(end - start) + " seconds to complete.")
 
