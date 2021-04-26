@@ -5,7 +5,9 @@ import math
 
 @cuda.jit
 def subtraction(arr_1, arr_2):
-    pass
+    pos = cuda.grid(1)
+    if pos < array_1.size:
+        arr_1[pos] -= arr_2[pos]
 
 
 array_1 = numpy.ones(128) * 8
