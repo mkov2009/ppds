@@ -3,6 +3,7 @@ from numba import cuda
 import numpy
 import math
 
+
 @cuda.jit
 def subtraction(arr_1, arr_2):
     pos = cuda.grid(1)
@@ -16,5 +17,3 @@ threadsperblock = 128
 blockspergrid = math.ceil(array_1.shape[0] / threadsperblock)
 subtraction[blockspergrid, threadsperblock](array_1, array_2)
 print(array_1)
-
-
